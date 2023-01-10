@@ -21,3 +21,5 @@ jobs:
         with:
           branch: main
           folder: docs # output folder from `npm run build-storybook`
+          path: docs
+          build_command: npm run build-storybook
