@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.1
-
+        uses: azure/login@v1
       - name: Install and Build
         run: |
           npm ci
@@ -20,6 +20,21 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@3.6.2
         with:
           branch: main
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
           folder: docs # output folder from `npm run build-storybook`
           path: docs
           build_command: npm run build-storybook
+          - name: Upload to blob storage
+      uses: azure/CLI@v1
+      with:
+        inlineScript: |
+            az storage blob upload-batch --account-name cs2100320013b7ceabe   --auth-mode key -d '$web' -s .
+      - name: Purge CDN endpoint
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az cdn endpoint purge --content-paths  "/*" --profile-name "storyBookTest" --name "StoryBookTest" --resource-group "StoryBookTest"
+      - name: logout
+        run: |
+              az logout
+        if: always()
