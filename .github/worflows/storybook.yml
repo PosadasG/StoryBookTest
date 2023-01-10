@@ -17,7 +17,8 @@ jobs:
           npm run build-storybook
           ng build --output-path docs --base-href /StoryBookTest/
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@3.6.2
+      - uses: actions/checkout@v3
+      - uses: azure/login@v1
         with:
           branch: main
           creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -25,7 +26,7 @@ jobs:
           path: docs
           build_command: npm run build-storybook
           - name: Upload to blob storage
-      uses: azure/CLI@v1
+ 
       with:
         inlineScript: |
             az storage blob upload-batch --account-name cs2100320013b7ceabe   --auth-mode key -d '$web' -s .
