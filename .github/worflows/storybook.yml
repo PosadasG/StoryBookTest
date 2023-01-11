@@ -22,16 +22,16 @@ jobs:
         with:
           branch: main
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-          folder: docs # output folder from `npm run build-storybook`
-          path: docs
-          path: ${{ env.docs}}
+          folder: ../../docs # output folder from `npm run build-storybook`
+          path: ../../docs
+      
           build_command: npm run build-storybook
 
       - name: Upload to blob storage
-        path: ${{ env.docs}} 
+        path: ../../docs
         with:
           inlineScript: |
-                az storage blob upload-batch --account-name cs2100320013b7ceabe  --source docs  --auth-mode key -d '$web' -s .
+                az storage blob upload-batch --account-name cs2100320013b7ceabe  --source ../../docs  --auth-mode key -d '$web' -s .
       - name: Purge CDN endpoint
         uses: azure/CLI@v1
         with:
