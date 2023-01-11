@@ -28,11 +28,12 @@ jobs:
           build_command: npm run build-storybook
 
       - name: Upload to blob storage
-        path: ../../docs
+         package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/docs'
         with:
           inlineScript: |
                 az storage blob upload-batch --account-name cs2100320013b7ceabe  --source ../../docs  --auth-mode key -d '$web' -s .
       - name: Purge CDN endpoint
+        package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
         uses: azure/CLI@v1
         with:
           inlineScript: |
