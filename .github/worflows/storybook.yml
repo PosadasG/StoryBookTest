@@ -24,18 +24,17 @@ jobs:
       - name: Deploy
         uses: actions/checkout@v3
 
+   
       - name: Upload to blob storage
-        uses: azure/login@v1
-        with:
-          inlineScript: |
-              az storage blob upload-batch --account-name storybookstg2  --auth-mode key -d '$web' -s .
-      
-      - name: Purge CDN endpoint
-        package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/docs'
-        uses: azure/CLI@v1
-        with:
-          inlineScript: |
-            az cdn endpoint purge --content-paths  "/*" --profile-name "storybook3" --name "storybook3" --resource-group "StoryBook" 
+      uses: azure/CLI@v1
+      with:
+        inlineScript: |
+            az storage blob upload-batch --account-name storybookstg2 --auth-mode key -d '$web' -s .
+    - name: Purge CDN endpoint
+      uses: azure/CLI@v1
+      with:
+        inlineScript: |
+           az cdn endpoint purge --content-paths  "/*" --profile-name "storybook3 --name "storybook3" --resource-group "StoryBook"
       
       - name: logout
         run: |
