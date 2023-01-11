@@ -1,3 +1,4 @@
+#cb4ea19816a79290e0f0b102fc285ad57af399547b54ddb91545d8db7ff1b59e2-544e99bf-ab2d-4020-9fc5-4cb736cfff7a00f63473
 name: Storybook
 on:
   push:
@@ -24,20 +25,18 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           folder: docs # output folder from `npm run build-storybook`
           path: docs
-      
           build_command: npm run build-storybook
 
       - name: Upload to blob storage
-         package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/docs'
         with:
           inlineScript: |
-                az storage blob upload-batch --account-name cs2100320013b7ceabe  --source docs  --auth-mode key -d '$web' -s .
+              az storage blob upload-batch --account-name storybookstg2  --source docs  --auth-mode key -d '$web' -s .
       - name: Purge CDN endpoint
         package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/docs'
         uses: azure/CLI@v1
         with:
           inlineScript: |
-            az cdn endpoint purge --content-paths  "docs" --profile-name "storybook2" --name "storybook2" --resource-group "cloud-shell-storage-eastus" --no-wait
+            az cdn endpoint purge --content-paths  "docs" --profile-name "storybook3" --name "storybook3" --resource-group "StoryBook" --no-wait
       - name: logout
         run: |
               az logout
