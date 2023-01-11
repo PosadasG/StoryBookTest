@@ -24,12 +24,14 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           folder: docs # output folder from `npm run build-storybook`
           path: docs
+          path: ${{ env.docs}}
           build_command: npm run build-storybook
-          - name: Upload to blob storage
- 
-      with:
-        inlineScript: |
-            az storage blob upload-batch --account-name cs2100320013b7ceabe   --auth-mode key -d '$web' -s .
+
+      - name: Upload to blob storage
+        path: ${{ env.docs}} 
+        with:
+          inlineScript: |
+                az storage blob upload-batch --account-name cs2100320013b7ceabe   --auth-mode key -d '$web' -s .
       - name: Purge CDN endpoint
         uses: azure/CLI@v1
         with:
