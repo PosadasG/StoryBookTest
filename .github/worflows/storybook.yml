@@ -12,31 +12,31 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.3.1
         uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: Install and Build
         run: |
           npm ci
           npm run build-storybook
-          ng build --output-path docs --base-href /StoryBookTest/
+          ng build --output-path docs --base-href /StoryBookTest
+
       - name: Deploy
-      - uses: actions/checkout@v3
-      - uses: azure/login@v1
-        with:
-          branch: main
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-          folder: docs # output folder from `npm run build-storybook`
-          path: docs
-          build_command: npm run build-storybook
+        uses: actions/checkout@v3
 
       - name: Upload to blob storage
+        uses: azure/login@v1
         with:
           inlineScript: |
               az storage blob upload-batch --account-name storybookstg2  --source docs  --auth-mode key -d '$web' -s .
+      
       - name: Purge CDN endpoint
         package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/docs'
         uses: azure/CLI@v1
         with:
           inlineScript: |
             az cdn endpoint purge --content-paths  "docs" --profile-name "storybook3" --name "storybook3" --resource-group "StoryBook" --no-wait
+      
       - name: logout
         run: |
               az logout
