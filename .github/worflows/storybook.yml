@@ -31,7 +31,7 @@ jobs:
         path: ${{ env.docs}} 
         with:
           inlineScript: |
-                az storage blob upload-batch --account-name cs2100320013b7ceabe   --auth-mode key -d '$web' -s .
+                az storage blob upload-batch --account-name cs2100320013b7ceabe  --source docs  --auth-mode key -d '$web' -s .
       - name: Purge CDN endpoint
         uses: azure/CLI@v1
         with:
