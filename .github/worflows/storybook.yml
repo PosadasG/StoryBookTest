@@ -1,33 +1,43 @@
 #cb4ea19816a79290e0f0b102fc285ad57af399547b54ddb91545d8db7ff1b59e2-544e99bf-ab2d-4020-9fc5-4cb736cfff7a00f63473
-name: Blob storage website CI
-
+name: Storybook
 on:
-    push:
-        branches: [ main ]
+  push:
+    branches:
+      - main # if any push happens on branch `main`, run this workflow. You could also add `paths` to detect changes in specific folder
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: azure/login@v1
-      with:
+      - name: Checkout
+        uses: actions/checkout@v2.3.1
+        uses: azure/login@v1
+        with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Upload to blob storage
+      - name: Install and Build
+        run: |
+          npm ci
+          npm run build-storybook
+          ng build --output-path docs --base-href /StoryBookTest
+        working-directory: docs # set to the folder with your app if it is not the root directory
+      - name: Deploy
+        uses: actions/checkout@v3
+
+   
+      - name: Upload to blob storage
       uses: azure/CLI@v1
       with:
         inlineScript: |
-            az storage blob upload-batch --account-name storybookstg2 --auth-mode key -d '$web' -s .
+            az storage blob upload-batch --account-name storybookstgacc --auth-mode key -d '$web' -s .
     - name: Purge CDN endpoint
       uses: azure/CLI@v1
       with:
         inlineScript: |
-           az cdn endpoint purge --content-paths  "/*" --profile-name "storybook4" --name "storybook4" --resource-group "StoryBook"
-
-  # Azure logout
-    - name: logout
-      run: |
-            az logout
-      if: always()
-      
+           az cdn endpoint purge --content-paths  "docs" --profile-name "storybookTest2" --name "storybookTest2" --resource-group "StoryBook"
+        package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/docs/'
+      - name: logout
+        run: |
+              az logout
+        if: always()
+        
