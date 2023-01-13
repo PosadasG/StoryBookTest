@@ -23,7 +23,7 @@ jobs:
       uses: azure/CLI@v1
       with:
         inlineScript: |
-           az cdn endpoint purge --content-paths  "/*" --profile-name "storybook3" --name "storybook3" --resource-group "StoryBook"
+           az cdn endpoint purge --content-paths  "/*" --profile-name "storybook4" --name "storybook4" --resource-group "StoryBook"
 
   # Azure logout
     - name: logout
