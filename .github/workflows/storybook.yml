@@ -12,7 +12,14 @@ jobs:
     - uses: azure/login@v1
       with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-
+    
+    - name: Install and Build
+        run: |
+          npm ci
+          npm run build-storybook
+          ng build --output-path docs --base-href /StoryBookTest
+        working-directory: docs # set to the folder with your app if it is not the root directory
+        
     - name: Upload to blob storage
       uses: azure/CLI@v1
       with:
