@@ -8,18 +8,28 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: azure/login@v1
-      with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-    
-    - name: Install and Build
+     uses: actions/checkout@v2.3.1
+
+      - name: Install and Build
         run: |
           npm ci
           npm run build-storybook
           ng build --output-path docs --base-href /StoryBookTest
         working-directory: docs # set to the folder with your app if it is not the root directory
-        
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@3.6.2
+        with:
+          branch: main
+          folder: docs # output folder from `npm run build-storybook`
+          path: docs
+          build_command: npm run build-storybook
+    - name: login
+      uses: azure/login@v1
+     
+      with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+ 
     - name: Upload to blob storage
       uses: azure/CLI@v1
       with:
