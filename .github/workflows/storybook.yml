@@ -14,12 +14,6 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Install and Build
-        run: 
-          npm ci
-          npm run build-storybook
-          ng build --output-path docs --base-href /StoryBookTest
-
-    - name: Install and Build
         run: |
           npm ci
           npm run build-storybook
