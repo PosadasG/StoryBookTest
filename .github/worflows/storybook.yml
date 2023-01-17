@@ -29,7 +29,7 @@ jobs:
       uses: azure/CLI@v1
       with:
         inlineScript: |
-            az storage blob upload-batch -s "/*/docs" -d '$web' --account-name storybookstgacc2
+            az storage blob upload-batch -s "/*/docs" -d '$web' --account-name storybookstgacc2 --auth-mode key -d
     
     - name: Purge CDN endpoint
       uses: azure/CLI@v1
