@@ -15,11 +15,34 @@ jobs:
         run: |
           npm ci
           npm run build-storybook
-          ng build --output-path docs --base-href /StoryBookTest/
+         
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@3.6.2
         with:
           branch: main
           folder: docs # output folder from `npm run build-storybook`
-          path: docs
-          build_command: npm run build-storybook
+        
+       - name: login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
+      - name: Upload to blob storage
+        uses: azure/CLI@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          inlineScript: |         
+              az storage blob upload-batch --account-name "storybookstgacc2" --auth-mode key -d '$web' -s .\docs\
+    
+    - name: Purge CDN endpoint
+        uses: azure/CLI@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          inlineScript: |
+            az cdn endpoint purge --content-paths  $(Build.SourcesDirectory)\docs --profile-name "storybookcdn3" --name "storybookcdn3" --resource-group "StoryBook2" --no-wait
+       
+
+    - name: logout
+        run: |
+              az logout
+        if: always()
