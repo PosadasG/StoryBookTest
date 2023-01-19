@@ -19,12 +19,12 @@ jobs:
       with:
      
         inlineScript: |
-            az storage blob upload-batch --account-name "storybookstgacc3"  --auth-mode key -d "$web" -s "/docs"
+            az storage blob upload-batch --account-name "storybookstgacc3"  --auth-mode key -d "$web" -s "/*/docs"
     - name: Purge CDN endpoint
       uses: azure/CLI@v1
       with:
         inlineScript: |
-           az cdn endpoint purge --content-paths  "/docs" --profile-name "storybookcdn4"  --name "storybookcdn4"  --resource-group "StoryBook2"
+           az cdn endpoint purge --content-paths  "/*" --profile-name "storybookcdn4"  --name "storybookcdn4"  --resource-group "StoryBook2"
 
   # Azure logout
     - name: logout
