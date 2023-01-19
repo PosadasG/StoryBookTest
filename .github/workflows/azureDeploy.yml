@@ -2,7 +2,8 @@ name: Blob storage website CI
 
 on:
     push:
-        branches: [ gh-pages ]
+        branches:
+        - main
 
 jobs:
   build:
@@ -22,7 +23,7 @@ jobs:
       uses: azure/CLI@v1
       with:
         inlineScript: |
-           az cdn endpoint purge --content-paths  "/*" --profile-name "storybookcdn3"  --name "storybookcdn3"  --resource-group "StoryBook2"
+           az cdn endpoint purge --content-paths  "docs" --profile-name "storybookcdn3"  --name "storybookcdn3"  --resource-group "StoryBook2"
 
   # Azure logout
     - name: logout
