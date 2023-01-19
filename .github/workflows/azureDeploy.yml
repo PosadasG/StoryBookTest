@@ -1,12 +1,11 @@
 name: Blob storage website CI
 
 on:
-  push:
-    branches:
-      - main # if any push happens on branch `main`, run this workflow. You could also add `paths` to detect changes in specific folder
+    push:
+        branches: [ main ]
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -16,14 +15,14 @@ jobs:
 
     - name: Upload to blob storage
       uses: azure/CLI@v1
-      with:    
+      with:
         inlineScript: |
-            az storage blob upload-batch --destination '$web' --account-name storybookstgacc3  --source /docs --auth-mode key
+            az storage blob upload-batch --account-name storybookstgacc3 --auth-mode key -d '$web' -s '/docs'
     - name: Purge CDN endpoint
       uses: azure/CLI@v1
       with:
         inlineScript: |
-           az cdn endpoint purge --content-paths  "/*" --profile-name "storybookcdn4"  --name "storybookcdn4"  --resource-group "StoryBook2"
+           az cdn endpoint purge --content-paths  "/*" --profile-name storybookcdn4 --name storybookcdn4 --resource-group StoryBook2
 
   # Azure logout
     - name: logout
