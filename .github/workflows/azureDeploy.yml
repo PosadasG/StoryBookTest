@@ -16,8 +16,9 @@ jobs:
       uses: azure/CLI@v1
       with:
         branch: gh-pages
+        paths: docs
         inlineScript: |
-            az storage blob upload-batch --account-name "storybookstgacc2"  --auth-mode key -d '$web' --source /docs
+            az storage blob upload-batch --account-name "storybookstgacc2"  --auth-mode key -d '$web' -s .
     - name: Purge CDN endpoint
       uses: azure/CLI@v1
       with:
