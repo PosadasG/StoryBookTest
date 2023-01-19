@@ -1,7 +1,9 @@
 name: Blob storage website CI
 
 on:
-    [push]
+  push:
+    branches:
+      - main # if any push happens on branch `main`, run this workflow. You could also add `paths` to detect changes in specific folder
 
 jobs:
   deploy:
@@ -15,10 +17,10 @@ jobs:
     - name: Upload to blob storage
       uses: azure/CLI@v1
       with:
-        branch: gh-pages
+        branch: main
         paths: docs
         inlineScript: |
-            az storage blob upload-batch --account-name "storybookstgacc3"  --auth-mode key -d '$web' -s .
+            az storage blob upload-batch --account-name "storybookstgacc3"  --auth-mode key -d '$web' -s '/docs'
     - name: Purge CDN endpoint
       uses: azure/CLI@v1
       with:
@@ -30,4 +32,3 @@ jobs:
       run: |
             az logout
       if: always()
-      
