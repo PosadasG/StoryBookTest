@@ -14,7 +14,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --output-path docs --base-href /StoryBookTest/",
+    "build": "ng build --output-path docs",
     "watch": "ng build --watch --configuration development",
     "test": "jest --watchAll",
     "docs:json": "compodoc -p ./tsconfig.json -e json -d .",
