@@ -17,10 +17,9 @@ jobs:
     - name: Upload to blob storage
       uses: azure/CLI@v1
       with:
-        branch: main
-        paths: docs
+     
         inlineScript: |
-            az storage blob upload-batch --account-name "storybookstgacc3"  --auth-mode key -d '$web' -s '/docs'
+            az storage blob upload-batch --account-name "storybookstgacc3"  --auth-mode key -d "$web" -s "/docs"
     - name: Purge CDN endpoint
       uses: azure/CLI@v1
       with:
