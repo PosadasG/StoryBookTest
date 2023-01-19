@@ -17,12 +17,12 @@ jobs:
       with:
         branch: gh-pages
         inlineScript: |
-            az storage blob upload-batch --account-name "storybookstgacc2"  --auth-mode key -d '$web' -s .
+            az storage blob upload-batch --account-name "storybookstgacc2"  --auth-mode key -d '$web' --source /docs
     - name: Purge CDN endpoint
       uses: azure/CLI@v1
       with:
         inlineScript: |
-           az cdn endpoint purge --content-paths  "/*" --profile-name "storybookcdn3"  --name "storybookcdn3"  --resource-group "StoryBook2"
+           az cdn endpoint purge --content-paths  "docs" --profile-name "storybookcdn3"  --name "storybookcdn3"  --resource-group "StoryBook2"
 
   # Azure logout
     - name: logout
