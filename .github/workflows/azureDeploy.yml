@@ -6,7 +6,8 @@ on:
         - main
 
 jobs:
-  build:
+  deploy:
+    if: contains(fromJson('["refs/heads/main", "refs/heads/gh-pages"]'), github.ref)
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
