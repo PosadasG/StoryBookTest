@@ -17,7 +17,7 @@
   "scripts": {
     "ng": "ng",
     "start": "node --max-http-header-size=400000 ng serve",
-    "build": "ng build --prod --build-optimizer",
+    "build": "ng build --prod --build-optimizer --output-path=docs",
     "watch": "ng build --watch --configuration development",
     "test": "jest --watchAll",
     "docs:json": "compodoc -p ./tsconfig.json -e json -d .",
