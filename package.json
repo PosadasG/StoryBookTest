@@ -23,7 +23,7 @@
     "docs:json": "compodoc -p ./tsconfig.json -e json -d .",
     "storybook": "npm run docs:json && start-storybook -p 6006",
     "predeploy": "npm run build-storybook",
-    "build-storybook": "npm run docs:json && build-storybook -s public",
+    "build-storybook": "npm run docs:json && build-storybook",
     "deploy-storybook": "gh-pages -d storybook-static",
     "init-msw": "msw init src/",
     "chromatic": "npx chromatic --project-token=13e72a819f05"
